@@ -17,7 +17,7 @@ jobs:
     - name: Build the Docker image
       run: cd api && docker build -t simple-app/api-service -f container/Dockerfile .
     - name: Add tag
-      run: docker tag simple-app/api-service:latest ${{secrets.ACCOUNT_ID}{.dkr.ecr.ap-northeast-1.amazonaws.com/simple-app/api-service:latest
+      run: docker tag simple-app/api-service:latest ${{secrets.ACCOUNT_ID}}.dkr.ecr.ap-northeast-1.amazonaws.com/simple-app/api-service:latest
     - name: login to ECR
       run: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ${{secrets.ACCOUNT_ID}}.dkr.ecr.ap-northeast-1.amazonaws.com
     - name: push to ECR
