@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build -t simple-app/api-service -f api/container/Dockerfile .
+    - name: Add tag
+      run: docker tag simple-app/api-service:latest ${secrets.ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/simple-app/api-service:latest
+    - name: login to ECR
+      run: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ${secrets.ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com
+    - name: push to ECR
+      run: docker push ${secrets.ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/simple-app/api-service:latest
